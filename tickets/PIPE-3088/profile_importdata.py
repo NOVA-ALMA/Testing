@@ -1,51 +1,54 @@
-"""Profile the importdata MS read path including ZD computation.
-
-Profiles ObseringRunReader.get_observing_run() which is the core
-of what importdata.prepare() does per MS.  This covers:
-
-  - MS table reads (ANTENNA, FIELD, SPECTRAL_WINDOW, etc.)
-  - Field.set_zd_telmjd → compute_zenith_distance (the suspected bottleneck)
-  - Scan construction, state/field/source linking
-
-This is the relevant profiler script for PIPE-3088's original complaint
-(slow importdata tasks).
-
-Usage:
-    source <pipeline-env>
-    python profile_importdata.py
-
-Results are printed and also saved to /tmp/importdata.prof for
-interactive inspection with snakeviz or runsnake.
-"""
-
-import cProfile
-import pstats
-import sys
+"""Profile ImportData.prepare() to measure ZD/telmjd overhead.
+Run on different branches to compare. Uses a fresh MS copy per run.""" 
+import cProfile, pstats, io, time, os, shutil, tempfile
 
 from pipeline.infrastructure import casa_tools
-from pipeline.infrastructure.tablereader import ObservingRunReader
+from pipeline.infrastructure.launcher import Context
+from pipeline.h.tasks.importdata.importdata import ImportData, ImportDataInputs
+from pipeline.infrastructure.utils.utils import clear_time_cache
 
-MS_NAME = casa_tools.utils.resolve(
+MS_SRC = casa_tools.utils.resolve(
     "pl-unittest/uid___A002_Xc46ab2_X15ae_repSPW_spw16_17_small.ms"
 )
+MS_BASE = os.path.basename(MS_SRC)
 
-profiler = cProfile.Profile()
+workdir = tempfile.mkdtemp(prefix='zd_profile_')
+MS_DST = os.path.join(workdir, MS_BASE)
+print(f"Copying {MS_SRC} -> {MS_DST} ...")
+shutil.copytree(MS_SRC, MS_DST)
+print("Done.")
 
-print(f"Profiling get_observing_run on: {MS_NAME}")
-sys.stdout.flush()
+os.chdir(workdir)
+clear_time_cache()
 
-profiler.enable()
-observing_run = ObservingRunReader.get_observing_run(MS_NAME)
-profiler.disable()
+context = Context()
+inputs = ImportDataInputs(
+    context=context, vis=MS_DST, output_dir=workdir,
+    nocopy=True, datacolumns={'data': 'raw'},
+)
 
-# Print top 40 cumulative time consumers
-print("\n=== Top 40 by cumulative time ===\n")
-pstats.Stats(profiler, stream=sys.stdout).sort_stats('cumulative').print_stats(40)
+prof = cProfile.Profile()
+prof.enable()
+t0 = time.time()
+task = ImportData(inputs=inputs); results = task.prepare()
+t1 = time.time()
+prof.disable()
 
-print("\n=== Top 40 by total time ===\n")
-pstats.Stats(profiler, stream=sys.stdout).sort_stats('time').print_stats(40)
+total = t1 - t0
+print(f"\nTotal ImportData.prepare(): {total:.3f}s")
+print(f"MSes: {len(results.mses)}")
 
-# Save for interactive exploration
-profiler.dump_stats('/tmp/importdata.prof')
-print(f"\nProfile saved to /tmp/importdata.prof")
-print("View with: snakeviz /tmp/importdata.prof")
+s = io.StringIO()
+pstats.Stats(prof, stream=s).sort_stats('cumtime').print_stats()
+
+lines = s.getvalue().split('\n')
+for tag in ('zenith', 'zd_telmjd', 'telmjd', 'set_zd', 'set_field_zd'):
+    for l in lines:
+        if tag in l.lower():
+            print(f"  ZD: {l.strip()}")
+
+print("\n--- Top 20 cumulative ---")
+pstats.Stats(prof, stream=sys.stdout).sort_stats('cumtime').print_stats(20)
+
+os.chdir("/")
+shutil.rmtree(workdir, ignore_errors=True)
