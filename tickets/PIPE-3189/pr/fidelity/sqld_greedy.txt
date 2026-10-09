@@ -1,0 +1,128 @@
+2026-10-02 12:28:47 INFO: Pipeline version 2026.2.1.6+289-gb73367fc1-PIPE-3189-field-time-sqld running on eddington.desktop.astro.rug.nl
+2026-10-02 12:28:47 INFO: Host environment:
+	CPU: Intel(R) Core(TM) i7-14700T (physical cores: 20, logical cores: 28)
+	Memory: 30.7 GiB RAM, unknown swap
+	OS: Rocky Linux 9.8 (Blue Onyx)
+	cgroup limits: N/A of 28 CPU cores, memory limits=N/A
+	ulimit limits: CPU time=N/A, memory=N/A, files=524288
+2026-10-02 12:28:47 INFO: Environment as detected by CASA:
+	CPUs reported by CASA: 28 cores, max 28 OpenMP threads
+	Available memory: 30.7 GiB
+2026-10-02 12:28:47 INFO: Analysing /scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms
+2026-10-02 12:28:47 INFO: Populating ms.antenna_array...
+2026-10-02 12:28:47 INFO: Populating ms.spectral_windows...
+2026-10-02 12:28:48 INFO: No DataDescription XML found at /scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms/DataDescription.xml.
+2026-10-02 12:28:48 INFO: No SpectralWindow XML found at /scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms/SpectralWindow.xml.
+2026-10-02 12:28:48 INFO: Unable to read receiver info for MS uid___A002_Xf160b6_Xa57a.ms
+2026-10-02 12:28:48 INFO: No DataDescription XML found at /scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms/DataDescription.xml.
+2026-10-02 12:28:48 INFO: No SpectralWindow XML found at /scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms/SpectralWindow.xml.
+2026-10-02 12:28:48 INFO: Unable to read feed info for MS uid___A002_Xf160b6_Xa57a.ms: np.int64(0)
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=0
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 0
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 0
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=1
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 1
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 1
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=2
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 2
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 2
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=3
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 3
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 3
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=4
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 4
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 4
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=5
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 5
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 5
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=6
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 6
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 6
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=7
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 7
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 7
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=8
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 8
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 8
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=9
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 9
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 9
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=10
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 10
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 10
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=11
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 11
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 11
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=12
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 12
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 12
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=13
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 13
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 13
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=14
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 14
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 14
+2026-10-02 12:28:48 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=15
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 15
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 15
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 16
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 16
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 17
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 17
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 18
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 18
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 19
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 19
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 20
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 20
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 21
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 21
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 22
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 22
+2026-10-02 12:28:48 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 23
+2026-10-02 12:28:48 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 23
+2026-10-02 12:28:48 INFO: Populating ms.states...
+2026-10-02 12:28:50 INFO: Populating ms.fields...
+2026-10-02 12:28:50 INFO: Populating ms.sources...
+2026-10-02 12:28:50 INFO: Populating ms.data_descriptions...
+2026-10-02 12:28:50 INFO: Populating ms.polarizations...
+2026-10-02 12:28:50 INFO: Populating ms.correlator_name...
+2026-10-02 12:28:50 WARNING: Error reading science goals for uid___A002_Xf160b6_Xa57a.ms: No such file or directory: '/scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms/ASDM_SBSUMMARY'
+2026-10-02 12:28:50 ATTENTION: Unable to identify representative target for uid___A002_Xf160b6_Xa57a.ms. Will try to fall back to existing science target sources in the imaging tasks.
+2026-10-02 12:28:50 INFO: Populating ms.observing_modes...
+2026-10-02 12:28:50 WARNING: Error reading observing modes for uid___A002_Xf160b6_Xa57a.ms
+2026-10-02 12:28:50 INFO: Populating ms.science_goals...
+2026-10-02 12:28:50 INFO: Populating ms.acs_software_version and ms.acs_software_build_version...
+2026-10-02 12:28:50 INFO: Unable to read Annotation table information for MS uid___A002_Xf160b6_Xa57a.ms
+2026-10-02 12:28:50 INFO: Populating ms.array_name...
+2026-10-02 12:28:53 INFO: Linking fields to states...
+2026-10-02 12:28:54 INFO: Linking fields to sources...
+2026-10-02 12:28:54 INFO: Linking intents to spws...
+2026-10-02 12:28:54 INFO: Linking spectral windows to fields...
+2026-10-02 12:28:54 INFO: Populating ms.scans...
+MS: /scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms
+=== per-field timestamp counts ===
+field 3   full=63360   decimated=991     (1.6% kept)
+field 4   full=63360   decimated=991     (1.6% kept)
+field 5   full=63360   decimated=991     (1.6% kept)
+
+=== fidelity of decimation ===
+field 3   n=991    ZD range=12.4575 deg
+  [subset]  decimated pts are real full-series samples: True
+  [subset]  first/last t preserved: True   strictly sorted: True   min spacing=0.992s
+  [range]   |min delta|=0.000e+00 deg  |max delta|=0.000e+00 deg
+  [shape]   deviation from full curve: mean=8.858e-10 max=6.252e-09 deg (0.000% of ZD range)
+field 4   n=991    ZD range=12.4633 deg
+  [subset]  decimated pts are real full-series samples: True
+  [subset]  first/last t preserved: True   strictly sorted: True   min spacing=0.992s
+  [range]   |min delta|=0.000e+00 deg  |max delta|=0.000e+00 deg
+  [shape]   deviation from full curve: mean=8.847e-10 max=3.574e-09 deg (0.000% of ZD range)
+field 5   n=991    ZD range=12.4668 deg
+  [subset]  decimated pts are real full-series samples: True
+  [subset]  first/last t preserved: True   strictly sorted: True   min spacing=0.992s
+  [range]   |min delta|=0.000e+00 deg  |max delta|=0.000e+00 deg
+  [shape]   deviation from full curve: mean=8.860e-10 max=5.375e-09 deg (0.000% of ZD range)
+
+RESULT: PASS
+2026-10-02 12:28:51	WARN	pipeline::pipeline.infrastructure.tablereader::casa	Error reading science goals for uid___A002_Xf160b6_Xa57a.ms: No such file or directory: '/scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms/ASDM_SBSUMMARY'
+2026-10-02 12:28:51	WARN	pipeline::pipeline.infrastructure.tablereader::casa	Error reading observing modes for uid___A002_Xf160b6_Xa57a.ms

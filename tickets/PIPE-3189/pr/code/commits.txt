@@ -1,0 +1,115 @@
+commit 80f109819d196a7339ad449276a7cccfbf7b8e08
+Author: E. G. Patrick Bos <e.g.p.bos@rug.nl>
+Date:   Tue Oct 6 17:47:06 2026 +0200
+
+    PIPE-3189: stratify the decimation onto a uniform time grid
+    
+    Replace the greedy minimum-gap selection in _decimate_timestamps with a
+    uniform target grid: every min_interval step is snapped to the nearest real
+    timestamp, duplicates are dropped and the endpoints are re-added explicitly.
+    Fully vectorised (searchsorted + where + union1d).
+    
+    Why:
+    
+    * The grid spacing is honoured exactly. A minimum-gap rule cannot reach a 1s
+      target from, e.g., 0.576s continuum sampling and has to round up to 1.152s,
+      under-sampling by a third; on SQLD it settled at 1.008s rather than 1.000s.
+    * Selection depends only on time, never on sample density, so bursts are
+      represented in proportion to their duration rather than to their number of
+      samples.
+    * It is vectorised: _decimate_timestamps goes from 0.018s (2.9% of the
+      decimated runtime, a Python loop over 190,080 elements) to 0.001s in the
+      profile over 3 calls.
+    
+    The guarantee this buys is "at most one retained point per min_interval of
+    ELAPSED time" -- a bound on points per unit time, which is what bounds the
+    cost. It is deliberately not a guarantee that retained points are min_interval
+    apart: a grid node landing in a gap just past the end of a burst selects that
+    burst's final timestamp, so on the ticket's data 2.7% of adjacent pairs sit
+    closer than 0.5s (all of them at burst boundaries) while p50 = 0.992s and
+    everything outside the boundary pairs is >= 0.99s apart.
+    
+    Add min_count=50 as a continuous cap on sparsity: the grid tightens to
+    span/(min_count-1) for a short field rather than falling back to no
+    decimation. A binary "keep everything below 50" fallback would have handed a
+    short-but-dense field all its samples back and re-opened the SQLD pathology
+    for short dwell times.
+    
+    Measured on the ticket's dataset (SQLD, 3 fields x 63,360 timestamps):
+    190,080 -> 3,181 measures calls, 23.635s -> 0.429s (55x), ZD min/max
+    bit-identical on every field, the curve interpolated back onto the full time
+    base within 5.2e-08 deg (vs 4.7e-06 deg for the greedy rule, on a 12.67 deg
+    range), and the rendered zd_telmjd.png closer to main than the greedy variant
+    was (1373 vs 1430 pixels differing by > 8/255). t2-2-4.html and the other
+    three plots are byte-identical to main.
+    
+    Honest caveat on the mean, which is what this revision of the message is for.
+    zd_avg is round(np.average(zd), 2) on t2-1_details, and on this dataset main's
+    density-weighted mean already coincides with the time-weighted mean to better
+    than 1e-4 deg -- all 33 bursts are the same length -- so there is no mean bias
+    for either decimator to recover. The decimated mean is a sample mean of 3,181
+    points and lands within 0.011 deg of main's per field (0.09% of the ZD range),
+    which does move the displayed second decimal (26.99 -> 26.98). The greedy rule
+    did better on that one statistic (+0.0046); the grid wins on curve fidelity
+    (~90x), on pixel proximity to main, on the vectorisation above, and on
+    min_count. The claim this message previously carried -- that zd_avg error drops
+    "from 1.25 to 0.003 in ZD-proportional units ... on the ticket's dataset" --
+    came from a synthetic experiment, not from this dataset, and is withdrawn.
+    
+    zd_telmjd_test.py: 17 passed.
+
+ pipeline/infrastructure/renderer/htmlrenderer.py   |  84 +++++--
+ pipeline/infrastructure/renderer/zd_telmjd_test.py | 254 +++++++++++++++------
+ 2 files changed, 251 insertions(+), 87 deletions(-)
+
+commit 0fd43ae93457c9bd09299eaf788e92f7c9bb6e04
+Author: E. G. Patrick Bos <e.g.p.bos@rug.nl>
+Date:   Tue Oct 6 17:26:43 2026 +0200
+
+    PIPE-3189: relax zd test tolerance to survive measures-data refreshes
+    
+    zd_telmjd_test.py::test_zd_values used rel=5e-10, tighter than CASA's own
+    data-driven precision. The shared measurespath geodetic tables
+    (IERSeop2000, IERSpredict2000, TAI_UTC, IGRF, ...) were refreshed on
+    2026-10-05 20:04, which shifted every computed ZD by a constant
+    2.14e-08 deg. test_zd_values then fails on unmodified main as well --
+    verified against a pristine main worktree, identical failure, identical
+    diff -- so this is environment drift, not a PIPE-3189 regression.
+    
+    Use rel=1e-5: ~10,000x the observed drift, yet still 17x tighter than the
+    ~4e-3 deg that a one-second timestamp error would produce, so real
+    regressions are still caught. Timestamps themselves are asserted exactly
+    in test_telmjd_exact, which measures data cannot perturb.
+
+ pipeline/infrastructure/renderer/zd_telmjd_test.py | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+commit b73367fc1282bcc4a1f9defe3a6e47627fd81bc2
+Author: pbos <pbos@astro.rug.nl>
+Date:   Fri Oct 2 12:03:02 2026 +0200
+
+    PIPE-3189: decimate field.time in compute_zd_telmjd_for_ms
+    
+    compute_zd_telmjd_for_ms() iterated over every timestamp in field.time,
+    doing one measures_doframe + measures_measure per timestamp. For SQLD
+    spectral-line windows the integration time is ~16ms, so a single field can
+    yield ~62k timestamps instead of ~1k, all for a weblog plot whose 1s
+    resolution is already more than adequate.
+    
+    Add _decimate_timestamps() and apply it to field.time. It greedily keeps
+    timestamps at least 1s apart and always retains the first and last, so the
+    full time range is preserved.
+    
+    The ZD/telmjd values are consumed only by the weblog renderer
+    (ZDTELMJDChart and the min/avg/max summary stats); they are never written
+    to a persisted product nor read by another task. Field.time itself is left
+    untouched, so hifv/tasks/syspower (which uses it for range filtering only)
+    is unaffected.
+    
+    Verified on uid___A002_Xc46ab2_X15ae_repSPW_spw16_17_small.ms (helms30):
+    74 -> 55 timestamps, ZD min/max bit-identical, deviation from the full
+    curve ~1e-10 deg.
+
+ pipeline/infrastructure/renderer/htmlrenderer.py   | 55 +++++++++++++++++++++-
+ pipeline/infrastructure/renderer/zd_telmjd_test.py | 47 +++---------------
+ 2 files changed, 59 insertions(+), 43 deletions(-)

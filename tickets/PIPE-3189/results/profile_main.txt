@@ -1,0 +1,91 @@
+2026-10-02 10:01:23 INFO: Pipeline version 2026.2.1.6+288-ge33484632 running on eddington.desktop.astro.rug.nl
+2026-10-02 10:01:23 INFO: Host environment:
+	CPU: Intel(R) Core(TM) i7-14700T (physical cores: 20, logical cores: 28)
+	Memory: 30.7 GiB RAM, unknown swap
+	OS: Rocky Linux 9.8 (Blue Onyx)
+	cgroup limits: N/A of 28 CPU cores, memory limits=N/A
+	ulimit limits: CPU time=N/A, memory=N/A, files=524288
+2026-10-02 10:01:23 INFO: Environment as detected by CASA:
+	CPUs reported by CASA: 28 cores, max 28 OpenMP threads
+	Available memory: 30.7 GiB
+Copying /dataserver/users/almapipe/pbos/pipeline-testdata/pl-unittest/uid___A002_Xc46ab2_X15ae_repSPW_spw16_17_small.ms -> /tmp/zd_weblog_profile_c97oujle/uid___A002_Xc46ab2_X15ae_repSPW_spw16_17_small.ms ...
+Done.
+2026-10-02 10:01:23 INFO: Tracking execution duration for context: pipeline-20261002T100123
+2026-10-02 10:01:23 INFO: Analysing /tmp/zd_weblog_profile_c97oujle/uid___A002_Xc46ab2_X15ae_repSPW_spw16_17_small.ms
+2026-10-02 10:01:23 INFO: Populating ms.antenna_array...
+2026-10-02 10:01:23 INFO: Populating ms.spectral_windows...
+2026-10-02 10:01:23 INFO: Unable to read receiver info for MS uid___A002_Xc46ab2_X15ae_repSPW_spw16_17_small.ms
+2026-10-02 10:01:23 INFO: No receiver info available for MS uid___A002_Xc46ab2_X15ae_repSPW_spw16_17_small.ms spw id 0
+2026-10-02 10:01:23 INFO: No receiver info available for MS uid___A002_Xc46ab2_X15ae_repSPW_spw16_17_small.ms spw id 1
+2026-10-02 10:01:23 INFO: Populating ms.states...
+2026-10-02 10:01:23 INFO: Populating ms.fields...
+2026-10-02 10:01:23 INFO: Populating ms.sources...
+2026-10-02 10:01:23 INFO: Populating ms.data_descriptions...
+2026-10-02 10:01:23 INFO: Populating ms.polarizations...
+2026-10-02 10:01:23 INFO: Populating ms.correlator_name...
+2026-10-02 10:01:23 INFO: Populating ms.representative_target ...
+2026-10-02 10:01:23 INFO: Populating ms.observing_modes...
+2026-10-02 10:01:23 INFO: Populating ms.science_goals...
+2026-10-02 10:01:23 INFO: Populating ms.acs_software_version and ms.acs_software_build_version...
+2026-10-02 10:01:23 INFO: Unable to read Annotation table information for MS uid___A002_Xc46ab2_X15ae_repSPW_spw16_17_small.ms
+2026-10-02 10:01:23 INFO: Populating ms.array_name...
+2026-10-02 10:01:23 INFO: Linking fields to states...
+2026-10-02 10:01:23 INFO: Linking fields to sources...
+2026-10-02 10:01:23 INFO: Linking intents to spws...
+2026-10-02 10:01:23 INFO: Linking spectral windows to fields...
+2026-10-02 10:01:23 INFO: Populating ms.scans...
+
+Field 3 (helms30):
+  Original timestamps:        74
+  Decimation:           NOT ACTIVE (main branch)
+
+Total compute_zd_telmjd_for_ms(): 0.069s
+Total ZD values computed: 74
+Time per ZD value: 0.9ms
+
+--- ZD-related lines ---
+  1    0.001    0.001    0.069    0.069 /tmp/opencode/pipeline-main/pipeline/infrastructure/renderer/htmlrenderer.py:2076(compute_zd_telmjd_for_ms)
+  1    0.001    0.001    0.069    0.069 /tmp/opencode/pipeline-main/pipeline/infrastructure/renderer/htmlrenderer.py:2076(compute_zd_telmjd_for_ms)
+  75    0.000    0.000    0.002    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/site-packages/casatools/measures.py:453(doframe)
+  75    0.000    0.000    0.002    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/site-packages/casatools/__casac__/measures.py:1581(doframe)
+  75    0.002    0.000    0.002    0.000 {built-in method casatools.__casac__._measures.measures_doframe}
+  74    0.000    0.000    0.060    0.001 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/site-packages/casatools/measures.py:421(measure)
+  74    0.000    0.000    0.060    0.001 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/site-packages/casatools/__casac__/measures.py:1474(measure)
+  74    0.060    0.001    0.060    0.001 {built-in method casatools.__casac__._measures.measures_measure}
+  75    0.000    0.000    0.002    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/site-packages/casatools/measures.py:453(doframe)
+  75    0.000    0.000    0.002    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/site-packages/casatools/__casac__/measures.py:1581(doframe)
+  75    0.002    0.000    0.002    0.000 {built-in method casatools.__casac__._measures.measures_doframe}
+  1    0.000    0.000    0.000    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/site-packages/casatools/measures.py:166(observatory)
+  1    0.000    0.000    0.000    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/site-packages/casatools/__casac__/measures.py:628(observatory)
+  1    0.000    0.000    0.000    0.000 {built-in method casatools.__casac__._measures.measures_observatory}
+  1    0.000    0.000    0.000    0.000 /tmp/opencode/pipeline-main/pipeline/domain/measurementset.py:606(get_fields)
+
+--- Top 20 cumulative ---
+         12965 function calls in 0.069 seconds
+
+   Ordered by: cumulative time
+   List reduced from 53 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    0.069    0.069 /tmp/opencode/pipeline-main/pipeline/infrastructure/renderer/htmlrenderer.py:2076(compute_zd_telmjd_for_ms)
+      150    0.001    0.000    0.068    0.000 /tmp/opencode/pipeline-main/pipeline/infrastructure/casa_tools.py:34(f)
+       74    0.000    0.000    0.060    0.001 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/site-packages/casatools/measures.py:421(measure)
+       74    0.000    0.000    0.060    0.001 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/site-packages/casatools/__casac__/measures.py:1474(measure)
+       74    0.060    0.001    0.060    0.001 {built-in method casatools.__casac__._measures.measures_measure}
+      150    0.000    0.000    0.004    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/inspect.py:3343(signature)
+      150    0.000    0.000    0.003    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/inspect.py:3081(from_callable)
+      150    0.000    0.000    0.003    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/inspect.py:2501(_signature_from_callable)
+      150    0.001    0.000    0.003    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/inspect.py:2397(_signature_from_function)
+       75    0.000    0.000    0.002    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/site-packages/casatools/measures.py:453(doframe)
+       75    0.000    0.000    0.002    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/site-packages/casatools/__casac__/measures.py:1581(doframe)
+       75    0.002    0.000    0.002    0.000 {built-in method casatools.__casac__._measures.measures_doframe}
+      448    0.000    0.000    0.001    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/inspect.py:2743(__init__)
+      374    0.000    0.000    0.000    0.000 /tmp/opencode/pipeline-main/pipeline/infrastructure/casa_tools.py:47(format_arg_value)
+      150    0.000    0.000    0.000    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/inspect.py:3029(__init__)
+      150    0.000    0.000    0.000    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/inspect.py:176(get_annotations)
+      300    0.000    0.000    0.000    0.000 {method 'format' of 'str' objects}
+     1949    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+      150    0.000    0.000    0.000    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/inspect.py:754(unwrap)
+      300    0.000    0.000    0.000    0.000 /Users/users/pbos/miniforge3/envs/almaPL26CM/lib/python3.12/logging/__init__.py:1594(log)
+
+

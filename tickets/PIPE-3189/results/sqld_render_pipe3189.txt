@@ -1,0 +1,166 @@
+2026-10-02 12:33:01 INFO: Pipeline version 2026.2.1.6+289-gb73367fc1-PIPE-3189-field-time-sqld running on eddington.desktop.astro.rug.nl
+2026-10-02 12:33:01 INFO: Host environment:
+	CPU: Intel(R) Core(TM) i7-14700T (physical cores: 20, logical cores: 28)
+	Memory: 30.7 GiB RAM, unknown swap
+	OS: Rocky Linux 9.8 (Blue Onyx)
+	cgroup limits: N/A of 28 CPU cores, memory limits=N/A
+	ulimit limits: CPU time=N/A, memory=N/A, files=524288
+2026-10-02 12:33:01 INFO: Environment as detected by CASA:
+	CPUs reported by CASA: 28 cores, max 28 OpenMP threads
+	Available memory: 30.7 GiB
+====================================================================
+MS  : /scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms
+out : /tmp/sqld_weblog_3189
+mode: PIPE-3189 (decimated)
+module: /scratch/users/pbos/pipeline/pipeline/infrastructure/renderer/htmlrenderer.py
+====================================================================
+2026-10-02 12:33:01 INFO: Tracking execution duration for context: pipeline-20261002T123301
+2026-10-02 12:33:01 INFO: Analysing /scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms
+2026-10-02 12:33:01 INFO: Populating ms.antenna_array...
+2026-10-02 12:33:01 INFO: Populating ms.spectral_windows...
+2026-10-02 12:33:02 INFO: No DataDescription XML found at /scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms/DataDescription.xml.
+2026-10-02 12:33:02 INFO: No SpectralWindow XML found at /scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms/SpectralWindow.xml.
+2026-10-02 12:33:02 INFO: Unable to read receiver info for MS uid___A002_Xf160b6_Xa57a.ms
+2026-10-02 12:33:02 INFO: No DataDescription XML found at /scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms/DataDescription.xml.
+2026-10-02 12:33:02 INFO: No SpectralWindow XML found at /scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms/SpectralWindow.xml.
+2026-10-02 12:33:02 INFO: Unable to read feed info for MS uid___A002_Xf160b6_Xa57a.ms: np.int64(0)
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=0
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 0
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 0
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=1
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 1
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 1
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=2
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 2
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 2
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=3
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 3
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 3
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=4
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 4
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 4
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=5
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 5
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 5
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=6
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 6
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 6
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=7
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 7
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 7
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=8
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 8
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 8
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=9
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 9
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 9
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=10
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 10
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 10
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=11
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 11
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 11
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=12
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 12
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 12
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=13
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 13
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 13
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=14
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 14
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 14
+2026-10-02 12:33:02 INFO: No transition info available for SOURCE_ID=2 and SPECTRAL_WINDOW_ID=15
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 15
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 15
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 16
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 16
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 17
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 17
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 18
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 18
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 19
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 19
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 20
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 20
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 21
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 21
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 22
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 22
+2026-10-02 12:33:02 INFO: No receiver info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 23
+2026-10-02 12:33:02 INFO: No feed info available for MS uid___A002_Xf160b6_Xa57a.ms spw id 23
+2026-10-02 12:33:02 INFO: Populating ms.states...
+2026-10-02 12:33:03 INFO: Populating ms.fields...
+2026-10-02 12:33:04 INFO: Populating ms.sources...
+2026-10-02 12:33:04 INFO: Populating ms.data_descriptions...
+2026-10-02 12:33:04 INFO: Populating ms.polarizations...
+2026-10-02 12:33:04 INFO: Populating ms.correlator_name...
+2026-10-02 12:33:04 WARNING: Error reading science goals for uid___A002_Xf160b6_Xa57a.ms: No such file or directory: '/scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms/ASDM_SBSUMMARY'
+2026-10-02 12:33:04 ATTENTION: Unable to identify representative target for uid___A002_Xf160b6_Xa57a.ms. Will try to fall back to existing science target sources in the imaging tasks.
+2026-10-02 12:33:04 INFO: Populating ms.observing_modes...
+2026-10-02 12:33:04 WARNING: Error reading observing modes for uid___A002_Xf160b6_Xa57a.ms
+2026-10-02 12:33:04 INFO: Populating ms.science_goals...
+2026-10-02 12:33:04 INFO: Populating ms.acs_software_version and ms.acs_software_build_version...
+2026-10-02 12:33:04 INFO: Unable to read Annotation table information for MS uid___A002_Xf160b6_Xa57a.ms
+2026-10-02 12:33:04 INFO: Populating ms.array_name...
+2026-10-02 12:33:07 INFO: Linking fields to states...
+2026-10-02 12:33:07 INFO: Linking fields to sources...
+2026-10-02 12:33:07 INFO: Linking intents to spws...
+2026-10-02 12:33:07 INFO: Linking spectral windows to fields...
+2026-10-02 12:33:07 INFO: Populating ms.scans...
+2026-10-02 12:33:10 INFO: Virtual SPW Mapping: Created new mapping for science SPW X1848939096#ALMA_RB_03#BB_1#SW-01#FULL_RES (ID 16) from EB uid___A002_Xf160b6_Xa57a. Assigned new virtual-ID-to-name mapping: 16 - X1848939096#ALMA_RB_03#BB_1#SW-01#FULL_RES
+2026-10-02 12:33:10 INFO: Virtual SPW Mapping: Created new mapping for science SPW X1848939096#ALMA_RB_03#BB_2#SW-01#FULL_RES (ID 18) from EB uid___A002_Xf160b6_Xa57a. Assigned new virtual-ID-to-name mapping: 18 - X1848939096#ALMA_RB_03#BB_2#SW-01#FULL_RES
+2026-10-02 12:33:10 INFO: Virtual SPW Mapping: Created new mapping for science SPW X1848939096#ALMA_RB_03#BB_3#SW-01#FULL_RES (ID 20) from EB uid___A002_Xf160b6_Xa57a. Assigned new virtual-ID-to-name mapping: 20 - X1848939096#ALMA_RB_03#BB_3#SW-01#FULL_RES
+2026-10-02 12:33:10 INFO: Virtual SPW Mapping: Created new mapping for science SPW X1848939096#ALMA_RB_03#BB_4#SW-01#FULL_RES (ID 22) from EB uid___A002_Xf160b6_Xa57a. Assigned new virtual-ID-to-name mapping: 22 - X1848939096#ALMA_RB_03#BB_4#SW-01#FULL_RES
+2026-10-02 12:33:10 INFO: Executing plotms(vis='uid___A002_Xf160b6_Xa57a.ms', xaxis='azimuth', yaxis='elevation', spw='16:0~0,18:0~0,20:0~0,22:0~0', antenna='0&&*', avgchannel='9000', avgtime='10', coloraxis='field', customflaggedsymbol=True, flaggedsymbolshape='autoscaling', title='Elevation vs Azimuth for uid___A002_Xf160b6_Xa57a.ms', plotfile='azel.png', showgui=False, clearplots=True)
+NOTICE: Exporting to images in screen resolution is currently not working.  Switching to high resolution (which is slower, but works).
+2026-10-02 12:33:15 INFO: Executing plotms(vis='uid___A002_Xf160b6_Xa57a.ms', xaxis='time', yaxis='elevation', spw='16:0~0,18:0~0,20:0~0,22:0~0', antenna='0&&*', avgchannel='9000', avgtime='10', coloraxis='field', customflaggedsymbol=True, flaggedsymbolshape='autoscaling', title='Elevation vs Time for uid___A002_Xf160b6_Xa57a.ms', plotfile='el_vs_time.png', showgui=False, clearplots=True)
+NOTICE: Exporting to images in screen resolution is currently not working.  Switching to high resolution (which is slower, but works).
+2026-10-02 12:33:18 INFO: Undefined representative target source, defaulting to first target source (M83) for data set uid___A002_Xf160b6_Xa57a.ms
+2026-10-02 12:33:18 WARNING: Undefined representative bandwidth for data set uid___A002_Xf160b6_Xa57a.ms
+2026-10-02 12:33:19 INFO: Executing plotms(vis='uid___A002_Xf160b6_Xa57a.ms', xaxis='uwave', yaxis='vwave', field='3', spw='16', antenna='*&*', intent='OBSERVE_TARGET#ON_SOURCE', avgchannel='2048', customflaggedsymbol=False, plotrange=[-14208, 14208, -14208, 14208], title='Initial UV coverage for uid___A002_Xf160b6_Xa57a.ms', plotfile='uv_coverage.png', width=1000, height=1000, showgui=False, clearplots=True)
+NOTICE: Exporting to images in screen resolution is currently not working.  Switching to high resolution (which is slower, but works).
+html                3254 bytes  /tmp/sqld_weblog_3189/sessionsession_1/uid___A002_Xf160b6_Xa57a.ms/t2-2-4.html
+zd_telmjd.png      44436 bytes  /tmp/sqld_weblog_3189/sessionsession_1/uid___A002_Xf160b6_Xa57a.ms/zd_telmjd.png
+
+Field 3:
+  timestamps:    991 (of 63360 raw)
+  ZD min/max:    20.6878 / 33.1454 deg
+  ZD mean:       26.8665 deg
+  Time range:    2021-10-05 18:37:44.976000+00:00 to 2021-10-05 19:35:49.808000+00:00
+
+Field 4:
+  timestamps:    991 (of 63360 raw)
+  ZD min/max:    20.8027 / 33.2661 deg
+  ZD mean:       26.9985 deg
+  Time range:    2021-10-05 18:38:15.744000+00:00 to 2021-10-05 19:36:20.576000+00:00
+
+Field 5:
+  timestamps:    991 (of 63360 raw)
+  ZD min/max:    20.8954 / 33.3622 deg
+  ZD mean:       27.1204 deg
+  Time range:    2021-10-05 18:38:46.512000+00:00 to 2021-10-05 19:36:51.344000+00:00
+2026-10-02 12:33:04	WARN	pipeline::pipeline.infrastructure.tablereader::casa	Error reading science goals for uid___A002_Xf160b6_Xa57a.ms: No such file or directory: '/scratch/users/pbos/sqld_test/uid___A002_Xf160b6_Xa57a.ms/ASDM_SBSUMMARY'
+2026-10-02 12:33:04	WARN	pipeline::pipeline.infrastructure.tablereader::casa	Error reading observing modes for uid___A002_Xf160b6_Xa57a.ms
+2026-10-02 12:33:12	WARN	MSTransformManager::checkDataColumnsToFill	No datacolumn selected in buffer mode
+2026-10-02 12:33:12	WARN	MSTransformManager::checkCorrelatorPreaveraging	The data has already been preaveraged by the correlator but further smoothing or averaging has been requested. Preaveraged SPWs are: 16 18 20 22 
+2026-10-02 12:33:12	WARN	MSTransformManager::initDataSelectionParams	Number of selected channels 1 for SPW 16 is smaller than specified chanbin 9000
+2026-10-02 12:33:12	WARN	MSTransformManager::initDataSelectionParams+	Setting chanbin to 1 for SPW 16
+2026-10-02 12:33:12	WARN	MSTransformManager::initDataSelectionParams	Number of selected channels 1 for SPW 18 is smaller than specified chanbin 9000
+2026-10-02 12:33:12	WARN	MSTransformManager::initDataSelectionParams+	Setting chanbin to 1 for SPW 18
+2026-10-02 12:33:12	WARN	MSTransformManager::initDataSelectionParams	Number of selected channels 1 for SPW 20 is smaller than specified chanbin 9000
+2026-10-02 12:33:12	WARN	MSTransformManager::initDataSelectionParams+	Setting chanbin to 1 for SPW 20
+2026-10-02 12:33:12	WARN	MSTransformManager::initDataSelectionParams	Number of selected channels 1 for SPW 22 is smaller than specified chanbin 9000
+2026-10-02 12:33:12	WARN	MSTransformManager::initDataSelectionParams+	Setting chanbin to 1 for SPW 22
+2026-10-02 12:33:15	WARN	MSTransformManager::checkDataColumnsToFill	No datacolumn selected in buffer mode
+2026-10-02 12:33:15	WARN	MSTransformManager::checkCorrelatorPreaveraging	The data has already been preaveraged by the correlator but further smoothing or averaging has been requested. Preaveraged SPWs are: 16 18 20 22 
+2026-10-02 12:33:15	WARN	MSTransformManager::initDataSelectionParams	Number of selected channels 1 for SPW 16 is smaller than specified chanbin 9000
+2026-10-02 12:33:15	WARN	MSTransformManager::initDataSelectionParams+	Setting chanbin to 1 for SPW 16
+2026-10-02 12:33:15	WARN	MSTransformManager::initDataSelectionParams	Number of selected channels 1 for SPW 18 is smaller than specified chanbin 9000
+2026-10-02 12:33:15	WARN	MSTransformManager::initDataSelectionParams+	Setting chanbin to 1 for SPW 18
+2026-10-02 12:33:15	WARN	MSTransformManager::initDataSelectionParams	Number of selected channels 1 for SPW 20 is smaller than specified chanbin 9000
+2026-10-02 12:33:15	WARN	MSTransformManager::initDataSelectionParams+	Setting chanbin to 1 for SPW 20
+2026-10-02 12:33:15	WARN	MSTransformManager::initDataSelectionParams	Number of selected channels 1 for SPW 22 is smaller than specified chanbin 9000
+2026-10-02 12:33:15	WARN	MSTransformManager::initDataSelectionParams+	Setting chanbin to 1 for SPW 22
+2026-10-02 12:33:19	WARN	pipeline::pipeline.domain.measurementset::casa	Undefined representative bandwidth for data set uid___A002_Xf160b6_Xa57a.ms
+2026-10-02 12:33:19	WARN	MSTransformManager::checkDataColumnsToFill	No datacolumn selected in buffer mode
+2026-10-02 12:33:19	WARN	MSTransformManager::checkCorrelatorPreaveraging	The data has already been preaveraged by the correlator but further smoothing or averaging has been requested. Preaveraged SPWs are: 16 18 20 22 

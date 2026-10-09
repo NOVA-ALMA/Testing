@@ -1,0 +1,272 @@
+From b73367fc1282bcc4a1f9defe3a6e47627fd81bc2 Mon Sep 17 00:00:00 2001
+From: pbos <pbos@astro.rug.nl>
+Date: Fri, 2 Oct 2026 12:03:02 +0200
+Subject: [PATCH 1/3] PIPE-3189: decimate field.time in
+ compute_zd_telmjd_for_ms
+
+compute_zd_telmjd_for_ms() iterated over every timestamp in field.time,
+doing one measures_doframe + measures_measure per timestamp. For SQLD
+spectral-line windows the integration time is ~16ms, so a single field can
+yield ~62k timestamps instead of ~1k, all for a weblog plot whose 1s
+resolution is already more than adequate.
+
+Add _decimate_timestamps() and apply it to field.time. It greedily keeps
+timestamps at least 1s apart and always retains the first and last, so the
+full time range is preserved.
+
+The ZD/telmjd values are consumed only by the weblog renderer
+(ZDTELMJDChart and the min/avg/max summary stats); they are never written
+to a persisted product nor read by another task. Field.time itself is left
+untouched, so hifv/tasks/syspower (which uses it for range filtering only)
+is unaffected.
+
+Verified on uid___A002_Xc46ab2_X15ae_repSPW_spw16_17_small.ms (helms30):
+74 -> 55 timestamps, ZD min/max bit-identical, deviation from the full
+curve ~1e-10 deg.
+---
+ .../infrastructure/renderer/htmlrenderer.py   | 55 ++++++++++++++++++-
+ .../infrastructure/renderer/zd_telmjd_test.py | 47 ++--------------
+ 2 files changed, 59 insertions(+), 43 deletions(-)
+
+diff --git a/pipeline/infrastructure/renderer/htmlrenderer.py b/pipeline/infrastructure/renderer/htmlrenderer.py
+index 1c185882a..47e5e109b 100644
+--- a/pipeline/infrastructure/renderer/htmlrenderer.py
++++ b/pipeline/infrastructure/renderer/htmlrenderer.py
+@@ -2073,11 +2073,61 @@ def get_ms_attr_for_result(context, vis, accessor):
+     return accessor(ms)
+ 
+ 
++def _decimate_timestamps(
++        times: np.ndarray,
++        min_interval: float = 1.0,
++        ) -> np.ndarray:
++    """Subsample timestamps to avoid unnecessarily dense sampling.
++
++    SQLD spectral windows can have sampling rates as high as 16ms, leading
++    to ~60k timestamps for a single field.  For weblog rendering and similar
++    purposes, a ~1s resolution is more than adequate.  This function selects
++    a subset of timestamps such that no two consecutive selected timestamps
++    are closer than *min_interval* seconds.
++
++    The first and last timestamps are always included to preserve the full
++    time range.
++
++    Args:
++        times: Array of timestamps (seconds since MJD epoch).
++        min_interval: Minimum spacing between selected timestamps (seconds).
++
++    Returns:
++        Decimated array of timestamps, in ascending time order.
++    """
++    if len(times) <= 1:
++        return times
++
++    # The greedy selection below assumes ascending order. Field.time comes from
++    # msmd.timesforfield() and is ascending in practice, but if that ever changes
++    # the unsorted input would silently decimate to almost nothing.
++    if not np.all(np.diff(times) >= 0):
++        times = np.sort(times)
++
++    # Always keep the first timestamp
++    keep_mask = np.zeros(len(times), dtype=bool)
++    keep_mask[0] = True
++    last_kept = times[0]
++
++    for i in range(1, len(times)):
++        if times[i] - last_kept >= min_interval:
++            keep_mask[i] = True
++            last_kept = times[i]
++
++    # Always keep the last timestamp
++    keep_mask[-1] = True
++
++    return times[keep_mask]
++
++
+ def compute_zd_telmjd_for_ms(
+         ms: MeasurementSet,
+         ) -> dict[int, dict[str, list[float] | list[datetime.datetime]]]:
+     """
+-    Retrieve zenith angles (degrees) and times for TARGET fields at all timestamps.
++    Retrieve zenith angles (degrees) and times for TARGET fields at decimated timestamps.
++
++    Timestamps are decimated to ~1s resolution to avoid the unnecessarily dense
++    sampling of SQLD spectral windows (see PIPE-3189).
+ 
+     Args:
+         ms: The MeasurementSet object.
+@@ -2118,7 +2168,8 @@ def compute_zd_telmjd_for_ms(
+         tm_list = data[field.id]['telmjd']
+         field_dir = field._mdirection
+ 
+-        for time_seconds in field.time:
++        # Decimate timestamps to avoid dense SQLD sampling (PIPE-3189)
++        for time_seconds in _decimate_timestamps(field.time):
+             # field.time is seconds since 1858-11-17 (MJD origin)
+             mjd = float(time_seconds) / 86400.0
+             epoch_dict['m0']['value'] = mjd
+diff --git a/pipeline/infrastructure/renderer/zd_telmjd_test.py b/pipeline/infrastructure/renderer/zd_telmjd_test.py
+index 7afe76602..e600d5387 100644
+--- a/pipeline/infrastructure/renderer/zd_telmjd_test.py
++++ b/pipeline/infrastructure/renderer/zd_telmjd_test.py
+@@ -2,6 +2,9 @@
+ 
+ Records exact output values from main at commit c79f0ba71 to guard against
+ regressions when optimising the CASA measures-based implementation.
++
++Updated for PIPE-3189: timestamps are now decimated to ~1s resolution to
++avoid the unnecessarily dense SQLD sampling grid.
+ """
+ import datetime
+ 
+@@ -15,45 +18,29 @@ MS_NAME = casa_tools.utils.resolve(
+     "pl-unittest/uid___A002_Xc46ab2_X15ae_repSPW_spw16_17_small.ms"
+ )
+ 
+-# Expected zenith-distance values (degrees) recorded from main @ c79f0ba71.
++# Expected zenith-distance values (degrees) after 1s decimation (PIPE-3189).
+ # fmt: off
+ _ZDS = [
+     22.674321246538103,
+-    22.674547323664278,
+     22.674773638800218,
+-    22.6750001936626,
+     22.675226987505773,
+-    22.67545401982791,
+     22.675681291610363,
+-    22.675908802104164,
+     22.67613655154938,
+-    22.676364540187038,
+     22.677393444930132,
+-    22.67762274738366,
+     22.677852288984226,
+-    22.67808206922486,
+     22.678312088097567,
+-    22.67854234659727,
+     22.678772843463832,
+-    22.679003579191097,
+     22.67923455377173,
+-    22.67946576745012,
+     22.680509183393994,
+-    22.6807417105961,
+     22.68097447659696,
+-    22.681207481389333,
+     22.681440724457733,
+-    22.681674206810243,
+     22.68190792767756,
+-    22.682141887306177,
+     22.68237608594386,
+-    22.68261052307326,
+     22.68825856682092,
+     22.68867934176151,
+     22.689100848825053,
+     22.689523084824845,
+     22.689946052608132,
+-    22.690157809755036,
+     22.690369749239522,
+     22.690794177840203,
+     22.691219335995385,
+@@ -64,7 +51,6 @@ _ZDS = [
+     22.693356081582145,
+     22.693785620144723,
+     22.694215890099983,
+-    22.69443129856834,
+     22.69464688980339,
+     22.695078619480597,
+     22.695511079089847,
+@@ -75,7 +61,6 @@ _ZDS = [
+     22.697684324107087,
+     22.698121161611056,
+     22.69855872983959,
+-    22.69877778728255,
+     22.698997026846037,
+     22.699436054223632,
+     22.699875810565366,
+@@ -86,7 +71,6 @@ _ZDS = [
+     22.70208553425867,
+     22.702529667041908,
+     22.70297452875998,
+-    22.70319723333681,
+     22.703420119923308,
+     22.703866439934547,
+     22.70431348874919,
+@@ -97,41 +81,25 @@ _ZDS = [
+ 
+ _TELMJDS = [
+     "2017-09-11T06:22:06.192000+00:00",
+-    "2017-09-11T06:22:06.768001+00:00",
+     "2017-09-11T06:22:07.344000+00:00",
+-    "2017-09-11T06:22:07.920000+00:00",
+     "2017-09-11T06:22:08.496000+00:00",
+-    "2017-09-11T06:22:09.072000+00:00",
+     "2017-09-11T06:22:09.648000+00:00",
+-    "2017-09-11T06:22:10.224000+00:00",
+     "2017-09-11T06:22:10.800000+00:00",
+-    "2017-09-11T06:22:11.376000+00:00",
+     "2017-09-11T06:22:13.968000+00:00",
+-    "2017-09-11T06:22:14.544000+00:00",
+     "2017-09-11T06:22:15.120000+00:00",
+-    "2017-09-11T06:22:15.696000+00:00",
+     "2017-09-11T06:22:16.271999+00:00",
+-    "2017-09-11T06:22:16.848000+00:00",
+     "2017-09-11T06:22:17.424000+00:00",
+-    "2017-09-11T06:22:18+00:00",
+     "2017-09-11T06:22:18.576000+00:00",
+-    "2017-09-11T06:22:19.152000+00:00",
+     "2017-09-11T06:22:21.743999+00:00",
+-    "2017-09-11T06:22:22.320000+00:00",
+     "2017-09-11T06:22:22.896000+00:00",
+-    "2017-09-11T06:22:23.472000+00:00",
+     "2017-09-11T06:22:24.048000+00:00",
+-    "2017-09-11T06:22:24.624000+00:00",
+     "2017-09-11T06:22:25.200000+00:00",
+-    "2017-09-11T06:22:25.776000+00:00",
+     "2017-09-11T06:22:26.352000+00:00",
+-    "2017-09-11T06:22:26.928000+00:00",
+     "2017-09-11T06:22:40.632001+00:00",
+     "2017-09-11T06:22:41.639999+00:00",
+     "2017-09-11T06:22:42.648001+00:00",
+     "2017-09-11T06:22:43.655999+00:00",
+     "2017-09-11T06:22:44.664001+00:00",
+-    "2017-09-11T06:22:45.168000+00:00",
+     "2017-09-11T06:22:45.671999+00:00",
+     "2017-09-11T06:22:46.680000+00:00",
+     "2017-09-11T06:22:47.688000+00:00",
+@@ -142,7 +110,6 @@ _TELMJDS = [
+     "2017-09-11T06:22:52.728001+00:00",
+     "2017-09-11T06:22:53.735999+00:00",
+     "2017-09-11T06:22:54.744000+00:00",
+-    "2017-09-11T06:22:55.248000+00:00",
+     "2017-09-11T06:22:55.752000+00:00",
+     "2017-09-11T06:22:56.760000+00:00",
+     "2017-09-11T06:22:57.768000+00:00",
+@@ -153,7 +120,6 @@ _TELMJDS = [
+     "2017-09-11T06:23:02.808001+00:00",
+     "2017-09-11T06:23:03.815999+00:00",
+     "2017-09-11T06:23:04.824000+00:00",
+-    "2017-09-11T06:23:05.328000+00:00",
+     "2017-09-11T06:23:05.831999+00:00",
+     "2017-09-11T06:23:06.840000+00:00",
+     "2017-09-11T06:23:07.848000+00:00",
+@@ -164,7 +130,6 @@ _TELMJDS = [
+     "2017-09-11T06:23:12.888000+00:00",
+     "2017-09-11T06:23:13.896000+00:00",
+     "2017-09-11T06:23:14.904000+00:00",
+-    "2017-09-11T06:23:15.408000+00:00",
+     "2017-09-11T06:23:15.912000+00:00",
+     "2017-09-11T06:23:16.920000+00:00",
+     "2017-09-11T06:23:17.927999+00:00",
+@@ -197,8 +162,8 @@ class TestZdTelmjd:
+ 
+     def test_timestamp_count(self, ms):
+         result = compute_zd_telmjd_for_ms(ms)
+-        assert len(result[3]['zd']) == 74
+-        assert len(result[3]['telmjd']) == 74
++        assert len(result[3]['zd']) == 55
++        assert len(result[3]['telmjd']) == 55
+ 
+     def test_telmjd_exact(self, ms):
+         result = compute_zd_telmjd_for_ms(ms)
+-- 
+2.52.0
+

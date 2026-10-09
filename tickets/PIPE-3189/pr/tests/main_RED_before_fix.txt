@@ -1,0 +1,11 @@
+ERROR conda.cli.main_run:execute(142): `conda run python -m pytest /tmp/opencode/pipeline-main/pipeline/infrastructure/renderer/zd_telmjd_test.py -v` failed. (See above for error)
+opencode/pipeline-main/pipeline/infrastructure/renderer/zd_telmjd_test.py::TestZdTelmjd::test_zd_values FAILED [ 25%]
+opencode/pipeline-main/pipeline/infrastructure/renderer/zd_telmjd_test.py::TestZdTelmjd::test_field_count PASSED [ 50%]
+opencode/pipeline-main/pipeline/infrastructure/renderer/zd_telmjd_test.py::TestZdTelmjd::test_timestamp_count PASSED [ 75%]
+opencode/pipeline-main/pipeline/infrastructure/renderer/zd_telmjd_test.py::TestZdTelmjd::test_telmjd_exact PASSED [100%]
+                f"diff={abs(actual-expected):.2e}"
+E           AssertionError: zd[0] mismatch: 22.6743212251656772 != 22.6743212465381028, diff=2.14e-08
+E             comparison failed
+FAILED opencode/pipeline-main/pipeline/infrastructure/renderer/zd_telmjd_test.py::TestZdTelmjd::test_zd_values - AssertionError: zd[0] mismatch: 22.6743212251656772 != 22.6743212465381028, diff=2.14e-08
+  comparison failed
+=================== 1 failed, 3 passed, 86 warnings in 4.60s ===================

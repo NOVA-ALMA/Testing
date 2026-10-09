@@ -1,0 +1,46 @@
+From 0fd43ae93457c9bd09299eaf788e92f7c9bb6e04 Mon Sep 17 00:00:00 2001
+From: "E. G. Patrick Bos" <e.g.p.bos@rug.nl>
+Date: Tue, 6 Oct 2026 17:26:43 +0200
+Subject: [PATCH 2/3] PIPE-3189: relax zd test tolerance to survive
+ measures-data refreshes
+
+zd_telmjd_test.py::test_zd_values used rel=5e-10, tighter than CASA's own
+data-driven precision. The shared measurespath geodetic tables
+(IERSeop2000, IERSpredict2000, TAI_UTC, IGRF, ...) were refreshed on
+2026-10-05 20:04, which shifted every computed ZD by a constant
+2.14e-08 deg. test_zd_values then fails on unmodified main as well --
+verified against a pristine main worktree, identical failure, identical
+diff -- so this is environment drift, not a PIPE-3189 regression.
+
+Use rel=1e-5: ~10,000x the observed drift, yet still 17x tighter than the
+~4e-3 deg that a one-second timestamp error would produce, so real
+regressions are still caught. Timestamps themselves are asserted exactly
+in test_telmjd_exact, which measures data cannot perturb.
+---
+ pipeline/infrastructure/renderer/zd_telmjd_test.py | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/pipeline/infrastructure/renderer/zd_telmjd_test.py b/pipeline/infrastructure/renderer/zd_telmjd_test.py
+index e600d5387..2995155b5 100644
+--- a/pipeline/infrastructure/renderer/zd_telmjd_test.py
++++ b/pipeline/infrastructure/renderer/zd_telmjd_test.py
+@@ -150,8 +150,15 @@ class TestZdTelmjd:
+     def test_zd_values(self, ms):
+         result = compute_zd_telmjd_for_ms(ms)
+         field = result[3]
++        # Tolerance absorbs CASA measures-data refreshes: the shared measurespath
++        # geodetic tables were updated on 2026-10-05 and shifted every ZD by a
++        # constant ~2.1e-08 deg (this test also fails on unmodified main then).
++        # rel=1e-5 is ~10,000x that drift yet still 17x tighter than the ~4e-3 deg
++        # that a one-second timestamp error would produce, so it keeps catching
++        # real regressions. Timestamps themselves are asserted exactly in
++        # test_telmjd_exact, which measures data cannot perturb.
+         for i, (actual, expected) in enumerate(zip(field['zd'], _ZDS)):
+-            assert actual == pytest.approx(expected, rel=5e-10), (
++            assert actual == pytest.approx(expected, rel=1e-5), (
+                 f"zd[{i}] mismatch: {actual:.16f} != {expected:.16f}, "
+                 f"diff={abs(actual-expected):.2e}"
+             )
+-- 
+2.52.0
+
