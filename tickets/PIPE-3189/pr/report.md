@@ -349,31 +349,48 @@ Recommend proceeding to review.
 
 ---
 
-## 9. Test tolerance fix (found while packaging the PR)
+## 9. Test tolerance change (found while packaging the PR)
 
-`zd_telmjd_test.py::test_zd_values` started failing on **2026-10-06**, with
-every one of the 55 ZD values shifted by a near-constant 2.14e-08 deg while
-`test_telmjd_exact` still passed to the microsecond.
+`zd_telmjd_test.py::test_zd_values` started failing on **2026-10-06**. Every recorded
+zenith distance moved by 2.14e-08 deg. `test_telmjd_exact` still passed to the microsecond.
 
-Not this ticket's doing. Verified against a pristine `main` worktree:
-`main`'s own test fails with the byte-identical assertion and diff
-(`22.6743212251656772 != 22.6743212465381028`), so both branches compute the
-same new value — only the recorded expectation is stale.
+This is not caused by this ticket. We verified it on a clean `main` worktree. `main` fails
+with the same assertion and the same diff:
 
-Cause: the shared CASA measures data directory
-`/dataserver/users/almapipe/pbos/measurespath/geodetic/*` (`IERSeop2000`,
-`IERSpredict2000`, `TAI_UTC`, `IGRF`, ...) was refreshed on **2026-10-05
-20:04**, between the original test run on 2026-10-02 and now. Those tables
-feed the frame transformation behind `measures`, so they move every derived
-zenith distance by a global offset.
+```
+zd[0] mismatch: 22.6743212251656772 != 22.6743212465381028, diff=2.14e-08
+```
 
-Fix (commit `0fd43ae93`): relax the assertion from `rel=5e-10` to
-`rel=1e-5`. That is ~10,000x the observed drift but still **17x tighter**
-than the ~4e-3 deg a one-second timestamp error would produce, so real
-regressions are still caught — and `test_telmjd_exact` asserts every
-timestamp with `==`, which measures data cannot perturb.
+So both branches compute the same value. Only the stored expectation is old.
+
+Cause: the shared CASA measures data at
+`/dataserver/users/almapipe/pbos/measurespath/geodetic/*` changed on **2026-10-05 20:04**.
+That is between the first test run on 2026-10-02 and the packaging of this PR. Those tables
+feed the frame transformation in `measures`. The change is the same for every value. We
+measured the spread across the series: 9.8e-10 deg. The change of the steps between values is
+at most 5.6e-10 deg.
+
+Fix in commit `0fd43ae93`: raise the tolerance from `rel=5e-10` to `rel=1e-5`.
+
+**This fix is not the right one, and we say so here.** `rel=1e-5` is 2.27e-04 deg at 22.675
+deg. The smallest step in the stored series is 2.1176e-04 deg. So five of the 58 adjacent
+pairs accept a zenith distance with the next timestamp. The code comment in the PR said
+"17x tighter than the ~4e-3 deg a one-second timestamp error would produce". That figure is
+the largest sky rate times one second. It is not the step in this test.
+
+The follow-up ticket replaces the tolerance with three assertions: the exact timestamps, a
+coarse check of the level, and a tight check of the pattern. It also stores a digest of the
+geodetic tables the values came from. See
+[`pr/benchmarks`](benchmarks/) and the ticket draft in
+`projects/20261117-pipe-3189/ticket-draft-measures-regression.md`.
 
 Evidence: `pr/tests/main_RED_before_fix.txt`.
+
+Known casacore limits we do not test here: the `MeasTable::dUT1` cache is valid for 0.04 d and
+has no clear API. casacore discusses it in
+[issue 1545](https://github.com/casacore/casacore/issues/1545). This test data spans 73.75 s,
+so the cache changes the zenith distance by 2.7e-09 deg at most. Only a leap-second straddle
+gives a large error. That needs its own data and its own test.
 
 ### Open items (not blocking)
 

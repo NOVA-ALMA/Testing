@@ -110,6 +110,55 @@ anti-aliasing.
 Note the thumbnails are never byte-identical even when pixel-identical —
 they embed `tIME`/`date:*`/`Thumb::URI` metadata. All `IDAT` data matches.
 
+### Plots linked in the PR description
+
+SQLD:
+`https://github.com/NOVA-ALMA/Testing/blob/main/tickets/PIPE-3189/pr/weblogs/sqld_main/sessionsession_1/uid___A002_Xf160b6_Xa57a.ms/zd_telmjd.png`
+(before) and
+`https://github.com/NOVA-ALMA/Testing/blob/main/tickets/PIPE-3189/pr/weblogs/sqld_stratified/sessionsession_1/uid___A002_Xf160b6_Xa57a.ms/zd_telmjd.png`
+(after).
+
+Continuum:
+`https://github.com/NOVA-ALMA/Testing/blob/main/tickets/PIPE-3189/pr/weblogs/small_ms_main/sessionsession_1/uid___A002_Xc46ab2_X15ae_repSPW_spw16_17_small.ms/zd_telmjd.png`
+and the `small_ms_stratified` counterpart.
+
+## Alternative considered: dropping the SQLD timestamps from `Field.time`
+
+Rui Xue's `PIPE-3189-strip-off-sqld-time-stamp` branch (`88d2348d5`) removes the
+SQLD timestamps from `FieldTable` instead of decimating at the consumer. Both
+were measured on the ticket's SQLD MS (24 SPWs, 8 SQLD) through the real
+`compute_zd_telmjd_for_ms`, best of two runs —
+`benchmarks/rui/RUI_VARIANT.md`:
+
+| variant | ZD points | wall clock |
+|---|---|---|
+| `main` (no decimation) | 190,080 | 33.42 s |
+| stratified (this PR) | 3,181 | 9.87 s |
+| Rui (SQLD timestamps stripped) | 3,264 | 9.89 s |
+| Rui + stratified | 2,980 | 9.90 s |
+
+Why this PR fixes the consumer rather than `Field.time`:
+
+* **It bounds the work.** Rui's rule falls back to the full list when an MS has
+  no non-SQLD SPWs (`_get_non_sqld_times()` returns `None`) or when the
+  intersection is empty, so a purely SQLD observation still runs 190,080
+  `measures` calls. Decimation caps the count whatever the SPW flags are.
+* **It keeps the extrema.** Rui's filter drops the first 0.504 s and last 0.488 s
+  of each field's series (the SQLD SPWs start earlier and end later), which moves
+  `zd_min`/`zd_max` by 1.8e-03 deg (6.4 arcsec) and the interpolated curve by up
+  to the same. Decimation reproduces the raw series' first, last and largest gaps
+  exactly and matches `main`'s min/max bit-for-bit.
+* **`Field.time` has a third consumer.** Besides `htmlrenderer.py:2121` and
+  `hifv/tasks/syspower/syspower.py:237`, `hifa/tasks/fluxscale/qa.py:365` selects
+  the flux-scale calibrator with `min(candidate_fields, key=lambda f: f.time.min())`.
+  Rui's filter moves `f.time.min()` by +0.288…+0.504 s for every field in this MS,
+  which can flip that selection. Worth a regression check before that change.
+
+The two are compatible: Rui + stratified returns genuine timestamps with the
+filtered endpoints preserved at the same cost. Suggested sequence — land this PR,
+then take the `Field.time` change as a follow-up ticket with the fluxscale QA
+verified.
+
 ## Tests
 
 `zd_telmjd_test.py` — **17 passed**: 4 `TestZdTelmjd` regression tests and 13
@@ -144,9 +193,18 @@ subject to floating-point tolerance.
    worst case is <= 0.0042 deg — 0.03 % of the observed range. Measured: 0.0.
 4. **`zd_telmjd_test.py::test_zd_values` was red on `main` as well.** The
    shared CASA measures data was refreshed on 2026-10-05, shifting every ZD
-   by a constant 2.14e-08 deg. Fixed by relaxing the tolerance from
-   `rel=5e-10` to `rel=1e-5` (still 17x tighter than a one-second timestamp
-   error); evidence in `tests/main_RED_before_fix.txt`.
+   by a constant 2.14e-08 deg; `main`'s `rel=5e-10` resolves to 1.1e-08 deg,
+   which is *smaller* than that drift, so the assertion fails on unmodified
+   `main` too (evidence in `tests/main_RED_before_fix.txt`). The branch widens
+   it to `rel=1e-5`. Honest caveat: at 22.675 deg that is 2.3e-04 deg absolute,
+   which is larger than the smallest step in the recorded series (2.12e-04 deg),
+   so the ZD assertion on its own cannot catch a ZD paired with the neighbouring
+   timestamp — `test_telmjd_exact`, which asserts every timestamp with `==`, is
+   what guards the selection. Measured drift is common-mode (−2.1e-08 deg on every
+   value, spread 9.8e-10 deg), so the durable fix is to compare the *shape* of the
+   series tightly and the absolute level coarsely, and to report the measures-data
+   version in the failure message. That redesign is out of scope here and tracked
+   as a follow-up ticket.
 5. **`solar_el_vs_time.png` missing** on the SQLD MS in *every* variant —
    `plotsuntrack.py:27` strips the MS path and resolves the basename against
    the cwd, then `SunTrackChart.plot()` swallows the `OSError` behind a bare

@@ -1,0 +1,25 @@
+	CPU: Intel(R) Core(TM) i7-14700T (physical cores: 20, logical cores: 28)
+	Memory: 30.7 GiB RAM, unknown swap
+	OS: Rocky Linux 9.9 (Blue Onyx)
+	cgroup limits: N/A of 28 CPU cores, memory limits=N/A
+	ulimit limits: CPU time=N/A, memory=N/A, files=1024
+	CPUs reported by CASA: 28 cores, max 28 OpenMP threads
+	Available memory: 30.7 GiB
+field 3 raw        n= 63360 gaps: max 187.792s median 0.0160s  5 largest [np.float64(187.79199981689453), np.float64(187.36000061035156), np.float64(187.26400089263916), np.float64(186.78400039672852), np.float64(62.08000087738037)]
+    coverage 5140175864.976 -> 5140179349.808 (3484.832s), gaps > 1s: 32
+field 3 Rui        n=  1089 gaps: max 188.784s median 1.0080s  5 largest [np.float64(188.7839994430542), np.float64(188.35200023651123), np.float64(188.2559995651245), np.float64(187.77600002288818), np.float64(63.07200050354004)]
+    coverage 5140175865.480 -> 5140179349.320 (3483.840s), gaps > 1s: 890
+field 3 stratified n=  1060 gaps: max 187.792s median 0.9920s  5 largest [np.float64(187.79199981689453), np.float64(187.36000061035156), np.float64(187.26400089263916), np.float64(186.78400039672852), np.float64(62.08000087738037)]
+    coverage 5140175864.976 -> 5140179349.808 (3484.832s), gaps > 1s: 512
+field 4 raw        n= 63360 gaps: max 187.792s median 0.0160s  5 largest [np.float64(187.79199886322021), np.float64(187.35999965667725), np.float64(187.26399993896484), np.float64(186.7839994430542), np.float64(62.08000087738037)]
+    coverage 5140175895.744 -> 5140179380.576 (3484.832s), gaps > 1s: 32
+field 4 Rui        n=  1089 gaps: max 188.784s median 1.0080s  5 largest [np.float64(188.78400135040283), np.float64(188.35200023651123), np.float64(188.25600051879883), np.float64(187.77600002288818), np.float64(63.07200050354004)]
+    coverage 5140175896.248 -> 5140179380.088 (3483.840s), gaps > 1s: 890
+field 4 stratified n=  1061 gaps: max 187.792s median 0.9920s  5 largest [np.float64(187.79199886322021), np.float64(187.35999965667725), np.float64(187.26399993896484), np.float64(186.7839994430542), np.float64(62.08000087738037)]
+    coverage 5140175895.744 -> 5140179380.576 (3484.832s), gaps > 1s: 509
+field 5 raw        n= 63360 gaps: max 187.792s median 0.0160s  5 largest [np.float64(187.79199981689453), np.float64(187.35999965667725), np.float64(187.26399993896484), np.float64(186.7839994430542), np.float64(62.08000087738037)]
+    coverage 5140175926.512 -> 5140179411.344 (3484.832s), gaps > 1s: 32
+field 5 Rui        n=  1086 gaps: max 188.784s median 1.0080s  5 largest [np.float64(188.78400039672852), np.float64(188.3519992828369), np.float64(188.2559995651245), np.float64(187.77600002288818), np.float64(63.07200050354004)]
+    coverage 5140175927.016 -> 5140179410.856 (3483.840s), gaps > 1s: 893
+field 5 stratified n=  1060 gaps: max 187.792s median 0.9920s  5 largest [np.float64(187.79199981689453), np.float64(187.35999965667725), np.float64(187.26399993896484), np.float64(186.7839994430542), np.float64(62.08000087738037)]
+    coverage 5140175926.512 -> 5140179411.344 (3484.832s), gaps > 1s: 511

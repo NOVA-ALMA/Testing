@@ -1,0 +1,52 @@
+	CPU: Intel(R) Core(TM) i7-14700T (physical cores: 20, logical cores: 28)
+	Memory: 30.7 GiB RAM, unknown swap
+	OS: Rocky Linux 9.9 (Blue Onyx)
+	cgroup limits: N/A of 28 CPU cores, memory limits=N/A
+	ulimit limits: CPU time=N/A, memory=N/A, files=1024
+	CPUs reported by CASA: 28 cores, max 28 OpenMP threads
+	Available memory: 30.7 GiB
+real compute_zd_telmjd_for_ms, wall clock (best of 2)
+  main (raw)              190080 ZD points     33.418 s
+  stratified (PR)           3181 ZD points      9.874 s
+  Rui (SQLD stripped)       3264 ZD points      9.889 s
+  Rui + stratified          2980 ZD points      9.896 s
+
+curve fidelity vs main (decimated curve interpolated onto main's time base)
+  stratified  field 3: max 5.209e-08 deg (0.00 arcsec), mean 3.437e-09 deg
+  stratified  field 4: max 1.471e-08 deg (0.00 arcsec), mean 3.412e-09 deg
+  stratified  field 5: max 1.336e-08 deg (0.00 arcsec), mean 2.842e-09 deg
+  Rui         field 3: max 1.766e-03 deg (6.36 arcsec), mean 9.454e-07 deg
+  Rui         field 4: max 1.767e-03 deg (6.36 arcsec), mean 9.043e-07 deg
+  Rui         field 5: max 1.768e-03 deg (6.37 arcsec), mean 9.045e-07 deg
+  Rui+strat   field 3: max 1.766e-03 deg (6.36 arcsec), mean 9.451e-07 deg
+  Rui+strat   field 4: max 1.767e-03 deg (6.36 arcsec), mean 9.046e-07 deg
+  Rui+strat   field 5: max 1.768e-03 deg (6.37 arcsec), mean 9.048e-07 deg
+
+range stats used by the weblog (min/max/mean of zd)
+  main        all TARGET fields: zd_min 20.687818 zd_avg 26.990562 zd_max 33.362170 telmjd_avg 1633460835.926186 (n=190080)
+  main        field 3: min 20.687818 max 33.145353 mean 26.861906
+  main        field 4: min 20.802734 max 33.266062 mean 26.993904
+  main        field 5: min 20.895416 max 33.362170 mean 27.115876
+  stratified  all TARGET fields: zd_min 20.687818 zd_avg 26.981531 zd_max 33.362170 telmjd_avg 1633460833.404227 (n=3181)
+  stratified  field 3: min 20.687818 max 33.145353 mean 26.852250
+  stratified  field 4: min 20.802734 max 33.266062 mean 26.983324
+  stratified  field 5: min 20.895416 max 33.362170 mean 27.109018
+  Rui         all TARGET fields: zd_min 20.689584 zd_avg 26.989892 zd_max 33.360406 telmjd_avg 1633460835.733632 (n=3264)
+  Rui         field 3: min 20.689584 max 33.143590 mean 26.861935
+  Rui         field 4: min 20.804502 max 33.264299 mean 26.993932
+  Rui         field 5: min 20.897185 max 33.360406 mean 27.114152
+  Rui+strat   all TARGET fields: zd_min 20.689584 zd_avg 26.993136 zd_max 33.360406 telmjd_avg 1633460836.634263 (n=2980)
+  Rui+strat   field 3: min 20.689584 max 33.143590 mean 26.861743
+  Rui+strat   field 4: min 20.804502 max 33.264299 mean 27.002061
+  Rui+strat   field 5: min 20.897185 max 33.360406 mean 27.115596
+
+Field.time endpoints and first-observation selection (hifa fluxscale QA)
+  field 0: raw n=42040 first 5140174973.136 last 5140175730.368 | Rui n=750 first 5140174973.640 last 5140175729.880 | first-obs shift +0.504 s last shift -0.488 s
+  field 1: raw n=23040 first 5140175753.760 last 5140179486.368 | Rui n=396 first 5140175754.264 last 5140179485.880 | first-obs shift +0.504 s last shift -0.488 s
+  field 2: raw n=5050 first 5140175829.552 last 5140178813.264 | Rui n=150 first 5140175829.840 last 5140178812.992 | first-obs shift +0.288 s last shift -0.272 s
+  field 3: raw n=63360 first 5140175864.976 last 5140179349.808 | Rui n=1089 first 5140175865.480 last 5140179349.320 | first-obs shift +0.504 s last shift -0.488 s
+  field 4: raw n=63360 first 5140175895.744 last 5140179380.576 | Rui n=1089 first 5140175896.248 last 5140179380.088 | first-obs shift +0.504 s last shift -0.488 s
+  field 5: raw n=63360 first 5140175926.512 last 5140179411.344 | Rui n=1086 first 5140175927.016 last 5140179410.856 | first-obs shift +0.504 s last shift -0.488 s
+
+pure-SQLD fallback behaviour (Rui's _get_non_sqld_times on an MS with no non-SQLD spw)
+  sqld-only -> returns None -> _times_for_field falls back to the full 63k list

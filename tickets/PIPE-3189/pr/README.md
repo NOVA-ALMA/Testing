@@ -20,6 +20,8 @@ locations and are kept only for provenance.
 | `fidelity/*_summary.txt` | Per-field means, reference means, curve-shape metrics, spacings |
 | `fidelity/*_{greedy,stratified}.txt` | `verify_zd_decimation.py` subset/range/shape checks |
 | `weblogs/COMPARISON.md` | Per-artefact comparison across all variants |
+| `benchmarks/rui/RUI_VARIANT.md` | Measured comparison against Rui Xue's `PIPE-3189-strip-off-sqld-time-stamp` branch |
+| `benchmarks/rui/*.out` | Raw output of the Rui-variant probes |
 | `weblogs/COMPARISON.txt` | Machine-generated comparison output |
 | `weblogs/{sqld,small_ms}_{main,greedy,stratified}/` | Rendered T2-2-4 pages and plots |
 | `scripts/*.py` | Every script used to produce the above |
