@@ -1,0 +1,304 @@
+From bfbba6d2d11ee173bcbe610400c08212c95a7d79 Mon Sep 17 00:00:00 2001
+From: "E. G. Patrick Bos" <egpbos@gmail.com>
+Date: Wed, 18 Nov 2026 15:56:25 +0100
+Subject: [PATCH 1/2] PIPE-3305: add a fingerprint of the geodetic values
+ measures() reads
+
+The four tables measures() opens for an observatory or AZELGEO measure are
+IERSeop97, IERSpredict, TAI_UTC and Observatories. A sha256 over the numeric
+values of the columns that move a zenith distance, limited to the MJD window
+56000-61000, identifies the data a recorded reference value came from. The
+digest covers table.f0 values only, because table.dat holds VS_CREATE and
+VS_DATE stamps. Reference value: 60ece9bd21e01000.
+---
+ pipeline/infrastructure/utils/casa_data.py    | 62 +++++++++++++++++++
+ .../infrastructure/utils/casa_data_test.py    | 14 +++++
+ 2 files changed, 76 insertions(+)
+
+diff --git a/pipeline/infrastructure/utils/casa_data.py b/pipeline/infrastructure/utils/casa_data.py
+index 645c67598..3e9fed8b1 100644
+--- a/pipeline/infrastructure/utils/casa_data.py
++++ b/pipeline/infrastructure/utils/casa_data.py
+@@ -5,6 +5,7 @@ Utilities to work with the CASA data files
+ import hashlib
+ import json
+ import os
++import struct
+ from datetime import datetime, timedelta, timezone
+ from glob import glob
+ 
+@@ -14,11 +15,15 @@ from .conversion import get_epoch_as_datetime
+ __all__ = [
+     "SOLAR_SYSTEM_MODELS_PATH",
+     "IERS_TABLES_PATH",
++    "GEODEDIC_TABLES",
++    "GEODEDIC_COLUMNS",
++    "EPOCH_WINDOW",
+     "get_file_md5",
+     "get_iso_mtime",
+     "get_solar_system_model_files",
+     "get_filename_info",
+     "get_object_info_string",
++    "get_measures_fingerprint",
+     "IERSInfo",
+     "from_mjd_to_datetime"
+ ]
+@@ -73,6 +78,63 @@ def get_object_info_string(ss_object: str, ss_path: str = SOLAR_SYSTEM_MODELS_PA
+     return f"Solar System models used for {ss_object} => " + info_string
+ 
+ 
++# PIPE-3305: the geodetic tables that measures() reads for an observatory or
++# AZELGEO calculation. Deleting any of them changes or breaks a zenith distance.
++# IERSeop2000, IERSpredict2000, IGRF and SCHED_locations have no effect there.
++GEODEDIC_TABLES = ('IERSeop97', 'IERSpredict', 'TAI_UTC', 'Observatories')
++GEODEDIC_COLUMNS = {
++    'IERSeop97': ('dUT1', 'x', 'y'),
++    'IERSpredict': ('dUT1', 'x', 'y'),
++    'TAI_UTC': ('dUTC', 'Offset'),
++    'Observatories': ('Long', 'Lat', 'Height'),
++}
++# MJD window of the recorded reference values. Values past the last measured row
++# of IERSeop97 are predictions, and predictions change with every update.
++EPOCH_WINDOW = (56000.0, 61000.0)
++
++
++def get_measures_fingerprint(
++    window: tuple[float, float] = EPOCH_WINDOW,
++    geodetic_path: str | None = None,
++) -> str:
++    """Return a 16-character digest of the geodetic values measures() reads.
++
++    The digest covers the numeric columns of the four geodetic tables that
++    measures() opens, limited to the MJD window. It does not hash table.dat,
++    which holds the VS_CREATE and VS_DATE stamps of an install, so two installs
++    of the same data give the same digest. A data update inside the window
++    changes the digest. The call reads four tables and takes about 20 ms.
++
++    Parameters:
++    ----------
++    window : tuple, optional
++        Lower and upper MJD bounds of the values to hash
++    geodetic_path : str, optional
++        Directory of the geodetic tables. Defaults to the measures() directory
++
++    Returns:
++    -------
++    str
++        The digest, or "NOT FOUND" when a table cannot be opened
++    """
++    if geodetic_path is None:
++        geodetic_path = IERS_TABLES_PATH
++    digest = hashlib.sha256()
++    try:
++        for table_name in GEODEDIC_TABLES:
++            with casa_tools.TableReader(os.path.join(geodetic_path, table_name)) as table:
++                mjd = None if table_name == 'Observatories' else table.getcol('MJD')
++                for column in GEODEDIC_COLUMNS[table_name]:
++                    values = table.getcol(column)
++                    if mjd is not None:
++                        values = [v for m, v in zip(mjd, values) if window[0] <= m <= window[1]]
++                    for value in values:
++                        digest.update(struct.pack('>d', float(value)))
++    except (IOError, RuntimeError):
++        return 'NOT FOUND'
++    return digest.hexdigest()[:16]
++
++
+ def _to_utc(dt: datetime) -> datetime:
+     """Return a timezone-aware UTC datetime, converting naive inputs."""
+     if dt.tzinfo is None:
+diff --git a/pipeline/infrastructure/utils/casa_data_test.py b/pipeline/infrastructure/utils/casa_data_test.py
+index b87b4597f..bb890c748 100644
+--- a/pipeline/infrastructure/utils/casa_data_test.py
++++ b/pipeline/infrastructure/utils/casa_data_test.py
+@@ -10,6 +10,7 @@ from .casa_data import (
+     get_solar_system_model_files,
+     get_filename_info,
+     get_object_info_string,
++    get_measures_fingerprint,
+     IERSInfo,
+     from_mjd_to_datetime
+ )
+@@ -212,3 +213,16 @@ def test_string_representation_for_IERS_info_when_data_is_not_found():
+         '"IERSeop2000": "NOT FOUND"}, "IERSeop2000_last_MJD": "NOT FOUND", '
+         '"IERSeop2000_last": null, "IERSpredict_last": null}'
+     )
++
++
++def test_measures_fingerprint_is_a_hex_string():
++    """The fingerprint of the tables measures() reads is 16 hex characters."""
++    fingerprint = get_measures_fingerprint()
++    assert fingerprint != 'NOT FOUND', 'the geodetic tables are not available'
++    assert len(fingerprint) == 16
++    assert all(character in '0123456789abcdef' for character in fingerprint)
++
++
++def test_measures_fingerprint_when_tables_are_missing():
++    """A geodetic directory without the four tables returns NOT FOUND."""
++    assert get_measures_fingerprint(geodetic_path=WRONG_GEODETIC_PATH) == 'NOT FOUND'
+-- 
+2.54.0 (Apple Git-157)
+
+From 81688ad7c1ccea9506dffb75ade5bcbd27c08f4d Mon Sep 17 00:00:00 2001
+From: "E. G. Patrick Bos" <egpbos@gmail.com>
+Date: Wed, 18 Nov 2026 15:56:26 +0100
+Subject: [PATCH 2/2] PIPE-3305: check the level and the pattern of the
+ zenith-distance series
+
+rel=1e-5 is 2.27e-04 deg at 22.675 deg, larger than the smallest step of the
+recorded series (2.1176e-04 deg). It accepts a ZD paired with the neighbouring
+timestamp for 5 of the 58 adjacent pairs. Replace it with a level check on the
+median offset and a pattern check on the residual after that offset. Record the
+measures fingerprint and warn when the running data differs from it.
+---
+ .../infrastructure/renderer/zd_telmjd_test.py | 102 +++++++++++++++---
+ 1 file changed, 90 insertions(+), 12 deletions(-)
+
+diff --git a/pipeline/infrastructure/renderer/zd_telmjd_test.py b/pipeline/infrastructure/renderer/zd_telmjd_test.py
+index fcdf2e916..3d0f7862e 100644
+--- a/pipeline/infrastructure/renderer/zd_telmjd_test.py
++++ b/pipeline/infrastructure/renderer/zd_telmjd_test.py
+@@ -6,8 +6,18 @@ regressions when optimising the CASA measures-based implementation.
+ Updated for PIPE-3189: timestamps are decimated onto a uniform ~1s target
+ grid to avoid the unnecessarily dense SQLD sampling grid, with a floor of
+ 50 retained timestamps so a short field keeps its resolution.
++
++Updated for PIPE-3305: the zenith-distance check compares the level of the
++series with its shape. The geodetic tables behind measures() change weekly.
++One update moves every value by the same 2.1e-08 deg, with a spread of
++9.8e-10 deg, and moves consecutive differences by at most 5.6e-10 deg. The
++level is not stable, so a fixed relative tolerance on each value is the wrong
++guard: rel=1e-5 is 2.27e-04 deg at 22.675 deg, larger than the smallest step
++of the series (2.1176e-04 deg). It accepts a value paired with the next
++timestamp for 5 of the 58 adjacent pairs.
+ """
+ import datetime
++import warnings
+ 
+ import numpy as np
+ import pytest
+@@ -18,6 +28,7 @@ from pipeline.infrastructure.renderer.htmlrenderer import (
+     _decimate_timestamps,
+     compute_zd_telmjd_for_ms,
+ )
++from pipeline.infrastructure.utils.casa_data import get_measures_fingerprint
+ 
+ MS_NAME = casa_tools.utils.resolve(
+     "pl-unittest/uid___A002_Xc46ab2_X15ae_repSPW_spw16_17_small.ms"
+@@ -152,6 +163,22 @@ _TELMJDS = [
+ ]
+ 
+ 
++# PIPE-3305: two checks replace the old per-value relative tolerance.
++# Level: one data refresh moves every value by the same 2.1e-08 deg (spread
++# 9.8e-10 deg). Pattern: consecutive differences drift by at most 5.6e-10 deg,
++# and the smallest step in the series is 2.1176e-04 deg.
++_ZD_LEVEL_TOL = 1e-4  # deg, absorbs the constant offset a data refresh adds
++_ZD_PATTERN_TOL = 1e-7  # deg, checks the shape after the offset is removed
++_MEASURES_FP = '60ece9bd21e01000'  # fingerprint of the data these values came from
++
++
++def _level_and_pattern(actual, expected):
++    """Return the median level offset and the largest pattern residual, in degrees."""
++    diffs = np.asarray(actual, dtype=float) - np.asarray(expected, dtype=float)
++    offset = float(np.median(diffs))
++    return offset, float(np.max(np.abs(diffs - offset)))
++
++
+ @pytest.fixture(scope='module')
+ def ms():
+     return MeasurementSetReader.get_measurement_set(MS_NAME)
+@@ -162,20 +189,19 @@ class TestZdTelmjd:
+     """Verify that compute_zd_telmjd_for_ms produces expected values."""
+ 
+     def test_zd_values(self, ms):
++        """Check the level and the pattern of the zenith-distance series."""
+         result = compute_zd_telmjd_for_ms(ms)
+         field = result[3]
+-        # Tolerance absorbs CASA measures-data refreshes: the shared measurespath
+-        # geodetic tables were updated on 2026-10-05 and shifted every ZD by a
+-        # constant ~2.1e-08 deg (this test also fails on unmodified main then).
+-        # rel=1e-5 is ~10,000x that drift yet still 17x tighter than the ~4e-3 deg
+-        # that a one-second timestamp error would produce, so it keeps catching
+-        # real regressions. Timestamps themselves are asserted exactly in
+-        # test_telmjd_exact, which measures data cannot perturb.
+-        for i, (actual, expected) in enumerate(zip(field['zd'], _ZDS)):
+-            assert actual == pytest.approx(expected, rel=1e-5), (
+-                f"zd[{i}] mismatch: {actual:.16f} != {expected:.16f}, "
+-                f"diff={abs(actual-expected):.2e}"
+-            )
++        fingerprint = get_measures_fingerprint()
++        offset, residual = _level_and_pattern(field['zd'], _ZDS)
++        message = (
++            f'zd series mismatch: level offset {offset:.3e} deg '
++            f'(tolerance {_ZD_LEVEL_TOL:.1e} deg), worst pattern residual '
++            f'{residual:.3e} deg (tolerance {_ZD_PATTERN_TOL:.1e} deg), '
++            f'measures fingerprint {fingerprint} (recorded {_MEASURES_FP})'
++        )
++        assert abs(offset) < _ZD_LEVEL_TOL, message
++        assert residual < _ZD_PATTERN_TOL, message
+ 
+     def test_field_count(self, ms):
+         result = compute_zd_telmjd_for_ms(ms)
+@@ -199,6 +225,58 @@ class TestZdTelmjd:
+             )
+ 
+ 
++@pytest.mark.unit
++class TestMeasuresData:
++    """Checks on the geodetic data behind the recorded values. No MS required."""
++
++    def test_fingerprint_is_recorded(self):
++        """Warn when the geodetic tables differ from the recorded reference."""
++        fingerprint = get_measures_fingerprint()
++        if fingerprint != _MEASURES_FP:
++            warnings.warn(
++                f'CASA measures data changed: fingerprint {fingerprint}, '
++                f'recorded {_MEASURES_FP}. The level check absorbs a constant '
++                'shift, but the recorded _ZDS values may need re-derivation.',
++                stacklevel=2,
++            )
++
++
++@pytest.mark.unit
++class TestZdSeriesChecks:
++    """Property tests for the PIPE-3305 level and pattern checks. No MS required."""
++
++    def test_single_value_shift_breaks_the_pattern(self):
++        """One value off by 1e-6 deg fails the pattern check."""
++        expected = list(_ZDS)
++        expected[10] += 1e-6
++        offset, residual = _level_and_pattern(_ZDS, expected)
++        assert offset == pytest.approx(0.0, abs=1e-12), offset
++        assert residual > _ZD_PATTERN_TOL, residual
++
++    def test_uniform_shift_keeps_the_pattern(self):
++        """A refresh that moves every value alike passes the pattern check."""
++        actual = [v + 1e-6 for v in _ZDS]
++        offset, residual = _level_and_pattern(actual, _ZDS)
++        assert offset == pytest.approx(1e-6, abs=1e-12), offset
++        assert residual < _ZD_PATTERN_TOL, residual
++        assert abs(offset) < _ZD_LEVEL_TOL, offset
++
++    def test_adjacent_swap_breaks_the_pattern(self):
++        """Two values paired with the wrong timestamps fail the pattern check."""
++        actual = list(_ZDS)
++        actual[23], actual[24] = actual[24], actual[23]
++        _, residual = _level_and_pattern(actual, _ZDS)
++        assert residual > _ZD_PATTERN_TOL, residual
++
++    def test_pattern_tolerance_stays_below_the_pairing_signal(self):
++        """The pattern check must stay far below the smallest step of the series."""
++        smallest_step = float(np.min(np.abs(np.diff(_ZDS))))
++        assert _ZD_PATTERN_TOL < smallest_step / 1000, (
++            f'pattern tolerance {_ZD_PATTERN_TOL} deg is not below one '
++            f'thousandth of the smallest step {smallest_step:.3e} deg'
++        )
++
++
+ @pytest.mark.unit
+ class TestDecimateTimestamps:
+     """Property tests for the PIPE-3189 decimation. No MS required."""
+-- 
+2.54.0 (Apple Git-157)
+

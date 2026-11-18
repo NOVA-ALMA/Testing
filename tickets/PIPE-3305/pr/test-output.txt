@@ -1,0 +1,62 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0 -- /Users/P252012/projects/ALMA/pipeline/.pixi/envs/default/bin/python
+cachedir: .pytest_cache
+metadata: {'Python': '3.12.13', 'Platform': 'macOS-27.2.1-arm64-arm-64bit', 'Packages': {'pytest': '9.1.1', 'pluggy': '1.6.0'}, 'Plugins': {'cov': '7.1.0', 'xdist': '3.8.0', 'metadata': '3.1.1', 'html': '4.2.0', 'xvfb': '3.1.1'}}
+rootdir: /private/var/folders/7t/j4mr_7qd43d_ys8gzkqgj3f00000gp/T/opencode/pipeline-3305
+configfile: pyproject.toml
+plugins: cov-7.1.0, xdist-3.8.0, metadata-3.1.1, html-4.2.0, xvfb-3.1.1
+collecting ... collected 45 items
+
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestZdTelmjd::test_zd_values PASSED [  2%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestZdTelmjd::test_field_count PASSED [  4%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestZdTelmjd::test_timestamp_count PASSED [  6%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestZdTelmjd::test_telmjd_exact PASSED [  8%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestMeasuresData::test_fingerprint_is_recorded PASSED [ 11%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestZdSeriesChecks::test_single_value_shift_breaks_the_pattern PASSED [ 13%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestZdSeriesChecks::test_uniform_shift_keeps_the_pattern PASSED [ 15%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestZdSeriesChecks::test_adjacent_swap_breaks_the_pattern PASSED [ 17%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestZdSeriesChecks::test_pattern_tolerance_stays_below_the_pairing_signal PASSED [ 20%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestDecimateTimestamps::test_output_is_sorted_subset_of_input PASSED [ 22%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestDecimateTimestamps::test_endpoints_preserved PASSED [ 24%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestDecimateTimestamps::test_short_dense_span_keeps_min_count[2.0] PASSED [ 26%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestDecimateTimestamps::test_short_dense_span_keeps_min_count[10.0] PASSED [ 28%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestDecimateTimestamps::test_short_dense_span_keeps_min_count[30.0] PASSED [ 31%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestDecimateTimestamps::test_short_dense_span_keeps_min_count[48.0] PASSED [ 33%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestDecimateTimestamps::test_long_span_uses_one_second_grid PASSED [ 35%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestDecimateTimestamps::test_grid_spacing_not_inflated_by_coarse_sampling PASSED [ 37%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestDecimateTimestamps::test_sparse_input_is_untouched PASSED [ 40%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestDecimateTimestamps::test_unsorted_input_is_sorted_before_selection PASSED [ 42%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestDecimateTimestamps::test_degenerate_inputs PASSED [ 44%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestDecimateTimestamps::test_allocation_follows_time_not_sample_count PASSED [ 46%]
+pipeline/infrastructure/renderer/zd_telmjd_test.py::TestDecimateTimestamps::test_mean_tracks_time_weighting_across_equal_bursts PASSED [ 48%]
+pipeline/infrastructure/utils/casa_data_test.py::test_md5_hash_string_solar_system_models PASSED [ 51%]
+pipeline/infrastructure/utils/casa_data_test.py::test_get_iso_mtime PASSED [ 53%]
+pipeline/infrastructure/utils/casa_data_test.py::test_retrieve_corresponding_solar_system_models_with_one_file PASSED [ 55%]
+pipeline/infrastructure/utils/casa_data_test.py::test_retrieve_corresponding_solar_system_models_with_two_files PASSED [ 57%]
+pipeline/infrastructure/utils/casa_data_test.py::test_get_filename_info PASSED [ 60%]
+pipeline/infrastructure/utils/casa_data_test.py::test_info_string_solar_system_models_with_one_file PASSED [ 62%]
+pipeline/infrastructure/utils/casa_data_test.py::test_info_string_solar_system_models_with_two_files PASSED [ 64%]
+pipeline/infrastructure/utils/casa_data_test.py::test_IERSInfo_class_creation PASSED [ 66%]
+pipeline/infrastructure/utils/casa_data_test.py::test_IERSInfo_class_loads_data PASSED [ 68%]
+pipeline/infrastructure/utils/casa_data_test.py::test_IERSInfo_get_IERS_version_method PASSED [ 71%]
+pipeline/infrastructure/utils/casa_data_test.py::test_IERSInfo_get_IERSeop2000_last_entry_method PASSED [ 73%]
+pipeline/infrastructure/utils/casa_data_test.py::test_get_IERS_info PASSED [ 75%]
+pipeline/infrastructure/utils/casa_data_test.py::test_validate_date_method PASSED [ 77%]
+pipeline/infrastructure/utils/casa_data_test.py::test_string_representation_for_IERS_info PASSED [ 80%]
+pipeline/infrastructure/utils/casa_data_test.py::test_date_message_type PASSED [ 82%]
+pipeline/infrastructure/utils/casa_data_test.py::test_date_message_type_when_data_is_not_found PASSED [ 84%]
+pipeline/infrastructure/utils/casa_data_test.py::test_from_mjd_to_datetime PASSED [ 86%]
+pipeline/infrastructure/utils/casa_data_test.py::test_IERSInfo_when_data_is_not_found PASSED [ 88%]
+pipeline/infrastructure/utils/casa_data_test.py::test_get_IERS_info_when_data_is_not_found PASSED [ 91%]
+pipeline/infrastructure/utils/casa_data_test.py::test_validate_date_method_when_data_is_not_found PASSED [ 93%]
+pipeline/infrastructure/utils/casa_data_test.py::test_string_representation_for_IERS_info_when_data_is_not_found PASSED [ 95%]
+pipeline/infrastructure/utils/casa_data_test.py::test_measures_fingerprint_is_a_hex_string PASSED [ 97%]
+pipeline/infrastructure/utils/casa_data_test.py::test_measures_fingerprint_when_tables_are_missing PASSED [100%]
+
+=============================== warnings summary ===============================
+../../../../../../../../Users/P252012/projects/ALMA/pipeline/.pixi/envs/default/lib/python3.12/site-packages/google/protobuf/internal/well_known_types.py:91
+  /Users/P252012/projects/ALMA/pipeline/.pixi/envs/default/lib/python3.12/site-packages/google/protobuf/internal/well_known_types.py:91: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
+    _EPOCH_DATETIME_NAIVE = datetime.datetime.utcfromtimestamp(0)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 45 passed, 1 warning in 3.29s =========================
