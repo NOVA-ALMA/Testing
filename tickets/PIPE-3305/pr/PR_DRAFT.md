@@ -4,6 +4,7 @@
 
 **Source branch:** `PIPE-3305-zd-test-measures-digest`
 **Target branch:** `main`
+**Reviewers:** Rui Xue, Federico Montesino Pouzols, Takeshi Nakazato, Patrick Sheehan
 
 ## Description
 
@@ -80,6 +81,15 @@ Negative control: the same swap passes the old `rel=1e-5` assertion. It fails th
 - casacore caches `dUT1` for 0.04 d. For the 73.75 s test series the effect is at most 2.7e-09 deg. See casacore issue 1545.
 - The level check absorbs a uniform shift. A uniform data change will not trip the pattern check. It trips the level check only above 1e-4 deg.
 - The fingerprint check warns. It does not fail the test. A maintainer must re-record `_ZDS` when the digest changes and the pattern also moves.
+
+## Questions for reviewers
+
+Patrick Sheehan: is MJD 56000 to 61000 the right window, and is the four-table list
+(`IERSeop97`, `IERSpredict`, `TAI_UTC`, `Observatories`) the right one for the work of the
+Measures Data Working Group? On this installation `IERSeop2000` and `IERSeop97` agree exactly
+on `dUT1`, `x` and `y` for all 5001 rows in the window, and both cover MJD 37665 to 61304. So
+a switch to the 2000 series would not change the digest today. It would change it if the two
+tables ever disagree, or if `measures()` starts reading a different table.
 
 ## Links
 
